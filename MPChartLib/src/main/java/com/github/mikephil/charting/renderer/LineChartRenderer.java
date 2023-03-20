@@ -319,6 +319,12 @@ public class LineChartRenderer extends LineRadarRenderer {
             drawLinearFill(c, dataSet, trans, mXBounds);
         }
 
+        // if drawing filled section is enabled
+        if (dataSet.isDrawFilledSectionEnabled() && entryCount > 0) {
+            int[] indexes = dataSet.getIndexesOfDrawFilledSection();
+            drawLinearFillSection(c, dataSet, trans, indexes[0], indexes[1]);
+        }
+
         // more than 1 color
         if (dataSet.getColors().size() > 1) {
 
@@ -448,10 +454,26 @@ public class LineChartRenderer extends LineRadarRenderer {
      */
     protected void drawLinearFill(Canvas c, ILineDataSet dataSet, Transformer trans, XBounds bounds) {
 
-        final Path filled = mGenerateFilledPathBuffer;
-
         final int startingIndex = bounds.min;
         final int endingIndex = bounds.range + bounds.min;
+
+        drawLinearFillSection(c, dataSet, trans, startingIndex, endingIndex);
+
+    }
+
+    /**
+     * Draws a filled section linear path on the canvas.
+     *
+     * @param c
+     * @param dataSet
+     * @param trans
+     * @param startingIndex
+     * @param endingIndex
+     */
+    protected void drawLinearFillSection(Canvas c, ILineDataSet dataSet, Transformer trans, int startingIndex, int endingIndex) {
+
+        final Path filled = mGenerateFilledPathBuffer;
+
         final int indexInterval = 128;
 
         int currentStartIndex = 0;
@@ -462,7 +484,7 @@ public class LineChartRenderer extends LineRadarRenderer {
         do {
             currentStartIndex = startingIndex + (iterations * indexInterval);
             currentEndIndex = currentStartIndex + indexInterval;
-            currentEndIndex = currentEndIndex > endingIndex ? endingIndex : currentEndIndex;
+            currentEndIndex = Math.min(currentEndIndex, endingIndex);
 
             if (currentStartIndex <= currentEndIndex) {
                 generateFilledPath(dataSet, currentStartIndex, currentEndIndex, filled);
