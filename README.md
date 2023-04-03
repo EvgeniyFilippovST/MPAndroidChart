@@ -24,7 +24,6 @@ This is a modified version of the file. The original file is located [**here**](
 1. [Social Media](#social)
 1. [More Examples](#more-examples)
 1. [License](#licence)
-1. [Creators](#creators)
 
 ### Gradle Setup
 
