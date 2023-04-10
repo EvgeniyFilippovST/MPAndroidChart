@@ -56,6 +56,8 @@ public class LineChartRenderer extends LineRadarRenderer {
     protected Path cubicPath = new Path();
     protected Path cubicFillPath = new Path();
 
+    protected Boolean isLineChartTime = false;
+
     public LineChartRenderer(LineDataProvider chart, ChartAnimator animator,
                              ViewPortHandler viewPortHandler) {
         super(animator, viewPortHandler);
@@ -378,15 +380,17 @@ public class LineChartRenderer extends LineRadarRenderer {
 
                 trans.pointValuesToPixel(mLineBuffer);
 
-                if (!mViewPortHandler.isInBoundsRight(firstCoordinateX))
-                    break;
+                if (!isLineChartTime) {
+                    if (!mViewPortHandler.isInBoundsRight(firstCoordinateX))
+                        break;
 
-                // make sure the lines don't do shitty things outside
-                // bounds
-                if (!mViewPortHandler.isInBoundsLeft(lastCoordinateX) ||
-                        !mViewPortHandler.isInBoundsTop(Math.max(firstCoordinateY, lastCoordinateY)) ||
-                        !mViewPortHandler.isInBoundsBottom(Math.min(firstCoordinateY, lastCoordinateY)))
-                    continue;
+                    // make sure the lines don't do shitty things outside
+                    // bounds
+                    if (!mViewPortHandler.isInBoundsLeft(lastCoordinateX) ||
+                            !mViewPortHandler.isInBoundsTop(Math.max(firstCoordinateY, lastCoordinateY)) ||
+                            !mViewPortHandler.isInBoundsBottom(Math.min(firstCoordinateY, lastCoordinateY)))
+                        continue;
+                }
 
                 // get the color that is set for this line-segment
                 mRenderPaint.setColor(dataSet.getColor(j));
@@ -782,6 +786,10 @@ public class LineChartRenderer extends LineRadarRenderer {
             mDrawBitmap.clear();
             mDrawBitmap = null;
         }
+    }
+
+    protected void setIsLineChartTime(boolean value) {
+        isLineChartTime = value;
     }
 
     private class DataSetImageCache {
