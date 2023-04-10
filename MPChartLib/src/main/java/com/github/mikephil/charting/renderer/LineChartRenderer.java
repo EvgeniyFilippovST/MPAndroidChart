@@ -56,8 +56,6 @@ public class LineChartRenderer extends LineRadarRenderer {
     protected Path cubicPath = new Path();
     protected Path cubicFillPath = new Path();
 
-    protected Boolean isLineChartTime = false;
-
     public LineChartRenderer(LineDataProvider chart, ChartAnimator animator,
                              ViewPortHandler viewPortHandler) {
         super(animator, viewPortHandler);
@@ -786,10 +784,6 @@ public class LineChartRenderer extends LineRadarRenderer {
             mDrawBitmap.clear();
             mDrawBitmap = null;
         }
-    }
-
-    protected void setIsLineChartTime(boolean value) {
-        isLineChartTime = value;
     }
 
     private class DataSetImageCache {

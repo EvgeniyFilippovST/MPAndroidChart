@@ -48,6 +48,8 @@ public abstract class DataRenderer extends Renderer {
      */
     protected Paint mValuePaint;
 
+    protected Boolean isLineChartTime = false;
+
     public DataRenderer(ChartAnimator animator, ViewPortHandler viewPortHandler) {
         super(viewPortHandler);
         this.mAnimator = animator;
@@ -166,5 +168,9 @@ public abstract class DataRenderer extends Renderer {
      * @param indices the highlighted values
      */
     public abstract void drawHighlighted(Canvas c, Highlight[] indices);
+
+    protected void setIsLineChartTime(boolean value) {
+        isLineChartTime = value;
+    }
 
 }
