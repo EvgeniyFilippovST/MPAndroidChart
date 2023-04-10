@@ -166,4 +166,6 @@ public abstract class DataRenderer extends Renderer {
      * @param indices the highlighted values
      */
     public abstract void drawHighlighted(Canvas c, Highlight[] indices);
+
+    protected abstract void setIsLineChartTime(boolean value);
 }

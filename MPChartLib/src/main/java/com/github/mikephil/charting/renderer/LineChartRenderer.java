@@ -788,6 +788,7 @@ public class LineChartRenderer extends LineRadarRenderer {
         }
     }
 
+    @Override
     protected void setIsLineChartTime(boolean value) {
         isLineChartTime = value;
     }
