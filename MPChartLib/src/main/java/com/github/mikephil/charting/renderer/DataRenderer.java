@@ -116,7 +116,7 @@ public abstract class DataRenderer extends Renderer {
         mValuePaint.setTextSize(set.getValueTextSize());
     }
 
-    protected boolean isLineChartTime() {
+    public boolean isLineChartTime() {
         return isLineChartTime;
     }
 
