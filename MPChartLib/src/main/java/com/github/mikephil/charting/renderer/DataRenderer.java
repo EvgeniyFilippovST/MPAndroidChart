@@ -116,6 +116,10 @@ public abstract class DataRenderer extends Renderer {
         mValuePaint.setTextSize(set.getValueTextSize());
     }
 
+    protected boolean isLineChartTime() {
+        return isLineChartTime;
+    }
+
     /**
      * Initializes the buffers used for rendering with a new size. Since this
      * method performs memory allocations, it should only be called if
