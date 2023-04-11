@@ -48,6 +48,8 @@ public abstract class DataRenderer extends Renderer {
      */
     protected Paint mValuePaint;
 
+    protected Boolean isLineChartTime = false;
+
     public DataRenderer(ChartAnimator animator, ViewPortHandler viewPortHandler) {
         super(viewPortHandler);
         this.mAnimator = animator;
@@ -114,6 +116,10 @@ public abstract class DataRenderer extends Renderer {
         mValuePaint.setTextSize(set.getValueTextSize());
     }
 
+    public boolean isLineChartTime() {
+        return isLineChartTime;
+    }
+
     /**
      * Initializes the buffers used for rendering with a new size. Since this
      * method performs memory allocations, it should only be called if
@@ -166,4 +172,9 @@ public abstract class DataRenderer extends Renderer {
      * @param indices the highlighted values
      */
     public abstract void drawHighlighted(Canvas c, Highlight[] indices);
+
+    public void useLineChartTime(boolean value) {
+        isLineChartTime = value;
+    }
+
 }

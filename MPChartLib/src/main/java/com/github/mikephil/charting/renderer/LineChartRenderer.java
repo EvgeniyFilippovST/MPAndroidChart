@@ -378,15 +378,17 @@ public class LineChartRenderer extends LineRadarRenderer {
 
                 trans.pointValuesToPixel(mLineBuffer);
 
-                if (!mViewPortHandler.isInBoundsRight(firstCoordinateX))
-                    break;
+                if (!isLineChartTime) {
+                    if (!mViewPortHandler.isInBoundsRight(firstCoordinateX))
+                        break;
 
-                // make sure the lines don't do shitty things outside
-                // bounds
-                if (!mViewPortHandler.isInBoundsLeft(lastCoordinateX) ||
-                        !mViewPortHandler.isInBoundsTop(Math.max(firstCoordinateY, lastCoordinateY)) ||
-                        !mViewPortHandler.isInBoundsBottom(Math.min(firstCoordinateY, lastCoordinateY)))
-                    continue;
+                    // make sure the lines don't do shitty things outside
+                    // bounds
+                    if (!mViewPortHandler.isInBoundsLeft(lastCoordinateX) ||
+                            !mViewPortHandler.isInBoundsTop(Math.max(firstCoordinateY, lastCoordinateY)) ||
+                            !mViewPortHandler.isInBoundsBottom(Math.min(firstCoordinateY, lastCoordinateY)))
+                        continue;
+                }
 
                 // get the color that is set for this line-segment
                 mRenderPaint.setColor(dataSet.getColor(j));
