@@ -172,8 +172,10 @@ public abstract class ChartTouchListener<T extends Chart<?>> extends GestureDete
     protected void fillSection() {
         if (mLastHighlighted != null && mLastHighlightedSecond != null) {
             List<ILineDataSet> dataSets = (List<ILineDataSet>) mChart.getData().getDataSets();
+            int filledStartIndex = (int) (mLastHighlighted.getX() - mChart.getXAxis().mAxisMinimum);
+            int filledEndIndex = (int) (mLastHighlightedSecond.getX() - mChart.getXAxis().mAxisMinimum);
             for (ILineDataSet set: dataSets) {
-                set.setDrawFilledSection((int) mLastHighlighted.getX(), (int) mLastHighlightedSecond.getX());
+                set.setDrawFilledSection(filledStartIndex, (int) (filledEndIndex));
             }
         }
     }
