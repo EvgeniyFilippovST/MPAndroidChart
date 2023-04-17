@@ -743,7 +743,12 @@ public class LineChartRenderer extends LineRadarRenderer {
             high.setDraw((float) pix.x, (float) pix.y);
 
             // draw the lines
-            drawHighlightLines(c, (float) pix.x, (float) pix.y, set);
+            if (high.getColor() == 0) {
+                drawHighlightLines(c, (float) pix.x, (float) pix.y, set);
+            } else {
+                drawHighlightLinesByTapping(c, (float) pix.x, (float) pix.y, set, high.getColor());
+            }
+
         }
     }
 

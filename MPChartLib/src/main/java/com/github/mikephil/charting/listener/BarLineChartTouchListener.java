@@ -2,7 +2,6 @@ package com.github.mikephil.charting.listener;
 
 import android.annotation.SuppressLint;
 import android.graphics.Matrix;
-import android.graphics.PointF;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -628,7 +627,13 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
         }
 
         Highlight h = mChart.getHighlightByTouchPoint(e.getX(), e.getY());
-        performHighlight(h, e);
+        if (!mChart.isHighlightSectionPerTapEnabled()) {
+            performHighlight(h, e);
+        } else {
+            int highLightColor = mChart.getData().getDataSets().get(0).getHighLightColor();
+            int activeHighLightColor = mChart.getData().getDataSets().get(0).getActiveHighLightColorForSection();
+            performHighlightSection(h, highLightColor, activeHighLightColor);
+        }
 
         return super.onSingleTapUp(e);
     }

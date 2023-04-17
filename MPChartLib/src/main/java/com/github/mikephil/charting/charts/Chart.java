@@ -774,6 +774,8 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      */
     protected IMarker mMarker;
 
+    protected boolean highlightSectionPerTapEnabled = false;
+
     /**
      * draws all MarkerViews on the highlighted positions
      */
@@ -1247,6 +1249,14 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      */
     public void setMarker(IMarker marker) {
         mMarker = marker;
+    }
+
+    public void setHighlightSectionPerTapEnabled(boolean enabled){
+        highlightSectionPerTapEnabled = enabled;
+    }
+
+    public boolean isHighlightSectionPerTapEnabled(){
+        return highlightSectionPerTapEnabled;
     }
 
     /**

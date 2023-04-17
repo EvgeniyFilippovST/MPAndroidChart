@@ -60,6 +60,8 @@ public class Highlight {
      */
     private float mDrawY;
 
+    private int color;
+
     public Highlight(float x, float y, int dataSetIndex, int dataIndex) {
         this.mX = x;
         this.mY = y;
@@ -213,6 +215,14 @@ public class Highlight {
      */
     public float getDrawY() {
         return mDrawY;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
+    public int getColor() {
+        return color;
     }
 
     /**

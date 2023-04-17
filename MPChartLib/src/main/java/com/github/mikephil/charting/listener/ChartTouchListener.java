@@ -6,6 +6,9 @@ import android.view.View;
 
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+
+import java.util.List;
 
 /**
  * Created by philipp on 12/06/15.
@@ -39,6 +42,10 @@ public abstract class ChartTouchListener<T extends Chart<?>> extends GestureDete
      * the last highlighted object (via touch)
      */
     protected Highlight mLastHighlighted;
+
+    protected Highlight mLastHighlightedSecond;
+
+    protected Highlight mLastLineTapped;
 
     /**
      * the gesturedetector used for detecting taps and longpresses, ...
@@ -123,6 +130,51 @@ public abstract class ChartTouchListener<T extends Chart<?>> extends GestureDete
         } else {
             mChart.highlightValue(h, true);
             mLastHighlighted = h;
+        }
+    }
+
+    protected void performHighlightSection(Highlight h, int highLightColor, int activeHighLightColor) {
+
+        if (mLastHighlighted == null) {
+            mChart.highlightValue(h, true);
+            mLastHighlighted = h;
+        } else if (mLastHighlightedSecond == null) {
+            mLastHighlightedSecond = h;
+            mLastLineTapped = mLastHighlightedSecond;
+            mLastHighlightedSecond.setColor(activeHighLightColor);
+            mChart.highlightValues(new Highlight[] { mLastHighlighted, mLastHighlightedSecond });
+            fillSection();
+        } else if (h.equalTo(mLastHighlighted)) {
+            mLastLineTapped = h;
+            mLastHighlighted.setColor(activeHighLightColor);
+            mLastHighlightedSecond.setColor(highLightColor);
+            mChart.highlightValues(new Highlight[] { mLastHighlighted, mLastHighlightedSecond });
+        } else if (h.equalTo(mLastHighlightedSecond)) {
+            mLastLineTapped = h;
+            mLastHighlightedSecond.setColor(activeHighLightColor);
+            mLastHighlighted.setColor(highLightColor);
+            mChart.highlightValues(new Highlight[] { mLastHighlighted, mLastHighlightedSecond });
+        } else if (mLastLineTapped.equalTo(mLastHighlighted) && h.getX() < mLastHighlightedSecond.getX()) {
+            mLastHighlighted = h;
+            mLastLineTapped = h;
+            mLastHighlighted.setColor(activeHighLightColor);
+            mChart.highlightValues(new Highlight[] { mLastHighlighted, mLastHighlightedSecond });
+            fillSection();
+         }else if (mLastLineTapped.equalTo(mLastHighlightedSecond) && h.getX() > mLastHighlighted.getX()) {
+            mLastHighlightedSecond = h;
+            mLastLineTapped = h;
+            mLastHighlightedSecond.setColor(activeHighLightColor);
+            mChart.highlightValues(new Highlight[]{mLastHighlighted, mLastHighlightedSecond});
+            fillSection();
+        }
+    }
+
+    protected void fillSection() {
+        if (mLastHighlighted != null && mLastHighlightedSecond != null) {
+            List<ILineDataSet> dataSets = (List<ILineDataSet>) mChart.getData().getDataSets();
+            for (ILineDataSet set: dataSets) {
+                set.setDrawFilledSection((int) mLastHighlighted.getX(), (int) mLastHighlightedSecond.getX());
+            }
         }
     }
 
