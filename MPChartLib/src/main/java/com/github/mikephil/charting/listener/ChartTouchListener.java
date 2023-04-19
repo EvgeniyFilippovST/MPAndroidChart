@@ -98,6 +98,10 @@ public abstract class ChartTouchListener<T extends Chart<?>> extends GestureDete
         mLastHighlighted = high;
     }
 
+    public void setLastHighlightedSecond(Highlight high) {
+        mLastHighlightedSecond = high;
+    }
+
     /**
      * returns the touch mode the listener is currently in
      *

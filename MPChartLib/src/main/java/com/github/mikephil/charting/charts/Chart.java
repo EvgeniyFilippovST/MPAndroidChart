@@ -500,6 +500,8 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
 
     public void clearHighlighted() {
         mIndicesToHighlight = new Highlight[0];
+        mChartTouchListener.setLastHighlighted(null);
+        mChartTouchListener.setLastHighlightedSecond(null);
     }
 
     /**
