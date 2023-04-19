@@ -29,6 +29,12 @@
             android:name="LineChartActivity1"
             android:exported="true"/>
         <activity
+            android:name="HighlightedLineChartActivity"
+            android:exported="true"/>
+        <activity
+            android:name="HighlightedLineChartTime"
+            android:exported="true"/>
+        <activity
             android:name="LineChartActivity2"
             android:exported="true"/>
         <activity
