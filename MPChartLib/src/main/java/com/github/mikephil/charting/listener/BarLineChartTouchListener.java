@@ -51,6 +51,7 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
     private float mSavedXDist = 1f;
     private float mSavedYDist = 1f;
     private float mSavedDist = 1f;
+    private final float lineWidthForHighlightDragging = 6;
 
     private IDataSet mClosestDataSetToTouch;
 
@@ -189,7 +190,7 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
                         boolean shouldPan = !mChart.isFullyZoomedOut() ||
                                 !mChart.hasNoDragOffset();
 
-                        if (shouldPan) {
+                        if (shouldPan && !isTappedOnTheLine(event)) {
 
                             float distanceX = Math.abs(event.getX() - mTouchStartPoint.x);
                             float distanceY = Math.abs(event.getY() - mTouchStartPoint.y);
@@ -285,6 +286,18 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
         mMatrix = mChart.getViewPortHandler().refresh(mMatrix, mChart, true);
 
         return true; // indicate event was handled
+    }
+
+    public boolean isTappedOnTheLine(MotionEvent event ) {
+        Highlight h = mChart.getHighlightByTouchPoint(event.getX(), event.getY());
+        float leftXOfFirstHighlighted = mLastHighlighted.getX() - lineWidthForHighlightDragging / 2;
+        float rightXOfFirstHighlighted = mLastHighlighted.getX() + lineWidthForHighlightDragging / 2;
+        float leftXOfSecondHighlighted = mLastHighlightedSecond.getX() - lineWidthForHighlightDragging / 2;
+        float rightXOfSecondHighlighted = mLastHighlightedSecond.getX() + lineWidthForHighlightDragging / 2;
+
+        return h != null
+                && (h.getX() > leftXOfFirstHighlighted && h.getX() < rightXOfFirstHighlighted)
+                || (h.getX() > leftXOfSecondHighlighted && h.getX() < rightXOfSecondHighlighted);
     }
 
     /**
