@@ -120,6 +120,10 @@ public class Highlight {
         return mX;
     }
 
+    public void setX(float x) {
+        mX = x;
+    }
+
     /**
      * returns the y-value of the highlighted value
      *

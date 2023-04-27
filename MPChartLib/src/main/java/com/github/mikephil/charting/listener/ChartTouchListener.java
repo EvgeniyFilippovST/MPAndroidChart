@@ -148,6 +148,13 @@ public abstract class ChartTouchListener<T extends Chart<?>> extends GestureDete
                 mLastHighlightedSecond.setColor(activeHighLightColor);
                 mChart.highlightValues(new Highlight[] { mLastHighlighted, mLastHighlightedSecond });
                 fillSection();
+            } else if (mLastHighlightedSecond == null && h.getX() == mLastHighlighted.getX()) {
+                mLastHighlightedSecond = h;
+                mLastHighlightedSecond.setX(mLastHighlightedSecond.getX() + 1);
+                mLastLineTapped = mLastHighlightedSecond;
+                mLastHighlightedSecond.setColor(activeHighLightColor);
+                mChart.highlightValues(new Highlight[] { mLastHighlighted, mLastHighlightedSecond });
+                fillSection();
             } else if (mLastHighlightedSecond == null && h.getX() < mLastHighlighted.getX()) {
                 mLastHighlightedSecond = mLastHighlighted;
                 mLastLineTapped = h;
