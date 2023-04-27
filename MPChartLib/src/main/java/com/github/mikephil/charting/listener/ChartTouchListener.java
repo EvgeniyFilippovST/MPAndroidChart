@@ -1,5 +1,8 @@
 package com.github.mikephil.charting.listener;
 
+import static android.content.ContentValues.TAG;
+
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -167,11 +170,13 @@ public abstract class ChartTouchListener<T extends Chart<?>> extends GestureDete
                 mLastHighlighted.setColor(activeHighLightColor);
                 mLastHighlightedSecond.setColor(highLightColor);
                 mChart.highlightValues(new Highlight[] { mLastHighlighted, mLastHighlightedSecond });
+                fillSection();
             } else if (h.equalTo(mLastHighlightedSecond)) {
                 mLastLineTapped = h;
                 mLastHighlightedSecond.setColor(activeHighLightColor);
                 mLastHighlighted.setColor(highLightColor);
                 mChart.highlightValues(new Highlight[] { mLastHighlighted, mLastHighlightedSecond });
+                fillSection();
             } else if (mLastLineTapped.equalTo(mLastHighlighted) && h.getX() < mLastHighlightedSecond.getX()) {
                 mLastHighlighted = h;
                 mLastLineTapped = h;
