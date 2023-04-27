@@ -290,14 +290,16 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
 
     public boolean isTappedOnTheLine(MotionEvent event ) {
         Highlight h = mChart.getHighlightByTouchPoint(event.getX(), event.getY());
-        float leftXOfFirstHighlighted = mLastHighlighted.getX() - lineWidthForHighlightDragging / 2;
-        float rightXOfFirstHighlighted = mLastHighlighted.getX() + lineWidthForHighlightDragging / 2;
-        float leftXOfSecondHighlighted = mLastHighlightedSecond.getX() - lineWidthForHighlightDragging / 2;
-        float rightXOfSecondHighlighted = mLastHighlightedSecond.getX() + lineWidthForHighlightDragging / 2;
-
-        return h != null
-                && (h.getX() > leftXOfFirstHighlighted && h.getX() < rightXOfFirstHighlighted)
-                || (h.getX() > leftXOfSecondHighlighted && h.getX() < rightXOfSecondHighlighted);
+        if (h != null && mLastHighlightedSecond != null) {
+            float leftXOfFirstHighlighted = mLastHighlighted.getX() - lineWidthForHighlightDragging / 2;
+            float rightXOfFirstHighlighted = mLastHighlighted.getX() + lineWidthForHighlightDragging / 2;
+            float leftXOfSecondHighlighted = mLastHighlightedSecond.getX() - lineWidthForHighlightDragging / 2;
+            float rightXOfSecondHighlighted = mLastHighlightedSecond.getX() + lineWidthForHighlightDragging / 2;
+            return  (h.getX() > leftXOfFirstHighlighted && h.getX() < rightXOfFirstHighlighted)
+                    || (h.getX() > leftXOfSecondHighlighted && h.getX() < rightXOfSecondHighlighted);
+        } else {
+            return false;
+        }
     }
 
     /**
