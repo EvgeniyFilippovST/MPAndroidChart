@@ -1,8 +1,5 @@
 package com.github.mikephil.charting.listener;
 
-import static android.content.ContentValues.TAG;
-
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
