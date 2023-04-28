@@ -164,8 +164,7 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
                 break;
 
             case MotionEvent.ACTION_MOVE:
-
-                if (mTouchMode == DRAG) {
+                if (mTouchMode == DRAG && !isTappedOnTheLine(event)) {
 
                     mChart.disableScroll();
 
@@ -173,6 +172,13 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
                     float y = mChart.isDragYEnabled() ? event.getY() - mTouchStartPoint.y : 0.f;
 
                     performDrag(event, x, y);
+                } else if (mTouchMode == DRAG && isTappedOnTheLine(event)) {
+                    if (mChart.isHighlightPerDragEnabled()) {
+                        mLastGesture = ChartGesture.DRAG;
+
+                        if (mChart.isHighlightPerDragEnabled())
+                            performHighlightDrag(event);
+                    }
 
                 } else if (mTouchMode == X_ZOOM || mTouchMode == Y_ZOOM || mTouchMode == PINCH_ZOOM) {
 
@@ -184,7 +190,6 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
                 } else if (mTouchMode == NONE
                         && Math.abs(distance(event.getX(), mTouchStartPoint.x, event.getY(),
                         mTouchStartPoint.y)) > mDragTriggerDist) {
-
                     if (mChart.isDragEnabled()) {
 
                         boolean shouldPan = !mChart.isFullyZoomedOut() ||
