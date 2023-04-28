@@ -162,25 +162,25 @@ public abstract class ChartTouchListener<T extends Chart<?>> extends GestureDete
                 mLastHighlighted.setColor(activeHighLightColor);
                 mChart.highlightValues(new Highlight[] { mLastHighlighted, mLastHighlightedSecond });
                 fillSection();
-            } else if (h.equalTo(mLastHighlighted)) {
+            } else if (h.isTappedOnTheLineWithInaccuracy(mLastHighlighted)) {
                 mLastLineTapped = h;
                 mLastHighlighted.setColor(activeHighLightColor);
                 mLastHighlightedSecond.setColor(highLightColor);
                 mChart.highlightValues(new Highlight[] { mLastHighlighted, mLastHighlightedSecond });
                 fillSection();
-            } else if (h.equalTo(mLastHighlightedSecond)) {
+            } else if (h.isTappedOnTheLineWithInaccuracy(mLastHighlightedSecond)) {
                 mLastLineTapped = h;
                 mLastHighlightedSecond.setColor(activeHighLightColor);
                 mLastHighlighted.setColor(highLightColor);
                 mChart.highlightValues(new Highlight[] { mLastHighlighted, mLastHighlightedSecond });
                 fillSection();
-            } else if (mLastLineTapped.equalTo(mLastHighlighted) && h.getX() < mLastHighlightedSecond.getX()) {
+            } else if (mLastLineTapped.isTappedOnTheLineWithInaccuracy(mLastHighlighted) && h.getX() < mLastHighlightedSecond.getX()) {
                 mLastHighlighted = h;
                 mLastLineTapped = h;
                 mLastHighlighted.setColor(activeHighLightColor);
                 mChart.highlightValues(new Highlight[] { mLastHighlighted, mLastHighlightedSecond });
                 fillSection();
-            } else if (mLastLineTapped.equalTo(mLastHighlightedSecond) && h.getX() > mLastHighlighted.getX()) {
+            } else if (mLastLineTapped.isTappedOnTheLineWithInaccuracy(mLastHighlightedSecond) && h.getX() > mLastHighlighted.getX()) {
                 mLastHighlightedSecond = h;
                 mLastLineTapped = h;
                 mLastHighlightedSecond.setColor(activeHighLightColor);

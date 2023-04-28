@@ -1,6 +1,8 @@
 
 package com.github.mikephil.charting.highlight;
 
+import android.view.MotionEvent;
+
 import com.github.mikephil.charting.components.YAxis;
 
 /**
@@ -62,6 +64,8 @@ public class Highlight {
 
     private int color;
 
+    private float lineWidthForHighlightDragging = 4;
+
     public Highlight(float x, float y, int dataSetIndex, int dataIndex) {
         this.mX = x;
         this.mY = y;
@@ -122,6 +126,14 @@ public class Highlight {
 
     public void setX(float x) {
         mX = x;
+    }
+
+    public float getLineWidthForHighlightDragging() {
+        return lineWidthForHighlightDragging;
+    }
+
+    public void setLineWidthForHighlightDragging(float width) {
+        lineWidthForHighlightDragging = width;
     }
 
     /**
@@ -246,6 +258,17 @@ public class Highlight {
                 return true;
             else
                 return false;
+        }
+    }
+
+    public boolean isTappedOnTheLineWithInaccuracy(Highlight h ) {
+        if (h != null) {
+            float leftXOfFirstHighlighted = h.getX() - lineWidthForHighlightDragging / 2;
+            float rightXOfFirstHighlighted = h.getX() + lineWidthForHighlightDragging / 2;
+            return  (this.getX() > leftXOfFirstHighlighted && this.getX() < rightXOfFirstHighlighted
+                    && this.mDataSetIndex == h.mDataSetIndex && this.mStackIndex == h.mStackIndex && this.mDataIndex == h.mDataIndex);
+        } else {
+            return false;
         }
     }
 

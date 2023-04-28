@@ -51,7 +51,7 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
     private float mSavedXDist = 1f;
     private float mSavedYDist = 1f;
     private float mSavedDist = 1f;
-    private final float lineWidthForHighlightDragging = 6;
+    private float lineWidthForHighlightDragging = 6;
 
     private IDataSet mClosestDataSetToTouch;
 
@@ -300,6 +300,14 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
         } else {
             return false;
         }
+    }
+
+    public float getLineWidthForHighlightDragging() {
+        return lineWidthForHighlightDragging;
+    }
+
+    public void setLineWidthForHighlightDragging(float width) {
+        lineWidthForHighlightDragging = width;
     }
 
     /**
