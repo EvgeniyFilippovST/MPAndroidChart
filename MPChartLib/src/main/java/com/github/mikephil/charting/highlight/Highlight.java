@@ -1,8 +1,6 @@
 
 package com.github.mikephil.charting.highlight;
 
-import android.view.MotionEvent;
-
 import com.github.mikephil.charting.components.YAxis;
 
 /**
