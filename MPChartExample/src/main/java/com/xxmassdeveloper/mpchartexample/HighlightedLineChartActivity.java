@@ -92,7 +92,7 @@ public class HighlightedLineChartActivity extends DemoBase implements OnSeekBarC
 
             chart.setHighlightPerDragEnabled(true);
             chart.setHighlightPerTapEnabled(true);
-            chart.setHighlightSectionPerTapEnabled(true);
+            chart.setHighlightSectionPerTapAndDragEnabled(true);
         }
 
         XAxis xAxis;

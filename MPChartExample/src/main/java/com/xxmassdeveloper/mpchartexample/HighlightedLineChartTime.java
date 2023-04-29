@@ -78,7 +78,7 @@ public class HighlightedLineChartTime extends DemoBase implements OnSeekBarChang
 
         chart.setHighlightPerDragEnabled(true);
         chart.setHighlightPerTapEnabled(true);
-        chart.setHighlightSectionPerTapEnabled(true);
+        chart.setHighlightSectionPerTapAndDragEnabled(true);
 
         // add data
         seekBarX.setProgress(100);
