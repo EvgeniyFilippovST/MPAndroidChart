@@ -64,6 +64,8 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
     private MPPointF mDecelerationCurrentPoint = MPPointF.getInstance(0,0);
     private MPPointF mDecelerationVelocity = MPPointF.getInstance(0,0);
 
+    private float downTime = 0f;
+
     /**
      * the distance of movement that will be counted as a drag
      */
@@ -484,14 +486,25 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
     private void performHighlightDrag(MotionEvent e) {
 
         Highlight h = mChart.getHighlightByTouchPoint(e.getX(), e.getY());
+        if (!isDownTimeSet) {
+            mLastHighlighted.setDownTime(1f);
+            mLastHighlightedSecond.setDownTime(2f);
+            isDownTimeSet = true;
+        }
 
-        if (h != null && !h.equalTo(mLastHighlighted) && mChart.isHighlightSectionPerTapAndDragEnabled()) {
-            int highLightColor = mChart.getData().getDataSets().get(0).getHighLightColor();
-            int activeHighLightColor = mChart.getData().getDataSets().get(0).getActiveHighLightColorForSection();
-            performHighlightSection(h, highLightColor, activeHighLightColor);
-        } else if (h != null && !h.equalTo(mLastHighlighted)) {
-            mLastHighlighted = h;
-            mChart.highlightValue(h, true);
+        if (h != null) {
+            if (mChart.isHighlightSectionPerTapAndDragEnabled()) {
+                int highLightColor = mChart.getData().getDataSets().get(0).getHighLightColor();
+                int activeHighLightColor = mChart.getData().getDataSets().get(0).getActiveHighLightColorForSection();
+                if (downTime != e.getDownTime()) {
+                    h.setDownTime(e.getDownTime());
+                    downTime = e.getDownTime();
+                }
+                performHighlightSection(h, highLightColor, activeHighLightColor);
+            } else {
+                mLastHighlighted = h;
+                mChart.highlightValue(h, true);
+            }
         }
     }
 

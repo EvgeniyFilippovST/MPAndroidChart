@@ -48,6 +48,8 @@ public abstract class ChartTouchListener<T extends Chart<?>> extends GestureDete
 
     protected Highlight mLastLineTapped;
 
+    protected boolean isDownTimeSet = false;
+
     /**
      * the gesturedetector used for detecting taps and longpresses, ...
      */
@@ -163,13 +165,13 @@ public abstract class ChartTouchListener<T extends Chart<?>> extends GestureDete
                 mLastHighlighted.setColor(activeHighLightColor);
                 mChart.highlightValues(new Highlight[] { mLastHighlighted, mLastHighlightedSecond });
                 fillSection();
-            } else if (h.isTappedOnTheLineWithInaccuracy(mLastHighlighted)) {
+            } else if (h.isTappedOnTheLineWithInaccuracy(mLastHighlighted) && h.getDownTime() != mLastHighlightedSecond.getDownTime()) {
                 mLastLineTapped = h;
                 mLastHighlighted.setColor(activeHighLightColor);
                 mLastHighlightedSecond.setColor(highLightColor);
                 mChart.highlightValues(new Highlight[] { mLastHighlighted, mLastHighlightedSecond });
                 fillSection();
-            } else if (h.isTappedOnTheLineWithInaccuracy(mLastHighlightedSecond)) {
+            } else if (h.isTappedOnTheLineWithInaccuracy(mLastHighlightedSecond) && h.getDownTime() != mLastHighlighted.getDownTime()) {
                 mLastLineTapped = h;
                 mLastHighlightedSecond.setColor(activeHighLightColor);
                 mLastHighlighted.setColor(highLightColor);
