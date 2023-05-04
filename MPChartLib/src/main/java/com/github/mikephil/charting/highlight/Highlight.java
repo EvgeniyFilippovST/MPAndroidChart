@@ -62,7 +62,7 @@ public class Highlight {
 
     private int color;
 
-    private float highlightInaccuracy = 3;
+    private float highlightInaccuracy = 1;
 
     private float downTime = 0f;
 

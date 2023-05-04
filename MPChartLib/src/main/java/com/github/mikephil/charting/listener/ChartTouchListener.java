@@ -140,57 +140,66 @@ public abstract class ChartTouchListener<T extends Chart<?>> extends GestureDete
         }
     }
 
-    protected void performHighlightSection(Highlight h, int highLightColor, int activeHighLightColor) {
-        if (h != null) {
-            if (mLastHighlighted == null) {
-                mChart.highlightValue(h, true);
-                mLastHighlighted = h;
-            } else if (mLastHighlightedSecond == null && h.getX() > mLastHighlighted.getX()) {
+    protected void performHighlightSection(Highlight h, int highLightColor, int activeHighLightColor, boolean isSingleTap) {
+        if (h == null) {
+            return;
+        }
+        if (mLastHighlighted == null) {
+            mChart.highlightValue(h, true);
+            mLastHighlighted = h;
+            return;
+        }
+        if (mLastHighlightedSecond == null) {
+            if (h.getX() > mLastHighlighted.getX()) {
                 mLastHighlightedSecond = h;
                 mLastLineTapped = mLastHighlightedSecond;
                 mLastHighlightedSecond.setColor(activeHighLightColor);
-                mChart.highlightValues(new Highlight[] { mLastHighlighted, mLastHighlightedSecond });
-                fillSection();
-            } else if (mLastHighlightedSecond == null && h.getX() == mLastHighlighted.getX()) {
+            } else if (h.getX() == mLastHighlighted.getX()) {
                 mLastHighlightedSecond = h;
                 mLastHighlightedSecond.setX(mLastHighlightedSecond.getX() + 1);
                 mLastLineTapped = mLastHighlightedSecond;
                 mLastHighlightedSecond.setColor(activeHighLightColor);
-                mChart.highlightValues(new Highlight[] { mLastHighlighted, mLastHighlightedSecond });
-                fillSection();
-            } else if (mLastHighlightedSecond == null && h.getX() < mLastHighlighted.getX()) {
+            } else {
                 mLastHighlightedSecond = mLastHighlighted;
                 mLastLineTapped = h;
                 mLastHighlighted = h;
                 mLastHighlighted.setColor(activeHighLightColor);
-                mChart.highlightValues(new Highlight[] { mLastHighlighted, mLastHighlightedSecond });
-                fillSection();
-            } else if (h.isTappedOnTheLineWithInaccuracy(mLastHighlighted) && h.getDownTime() != mLastHighlightedSecond.getDownTime()) {
+            }
+            mChart.highlightValues(new Highlight[]{mLastHighlighted, mLastHighlightedSecond});
+            fillSection();
+            return;
+        }
+        if (h.isTappedOnTheLineWithInaccuracy(mLastHighlighted)) {
+            if (!isSingleTap && h.getDownTime() != mLastHighlightedSecond.getDownTime()) {
                 mLastLineTapped = h;
                 mLastHighlighted.setColor(activeHighLightColor);
                 mLastHighlightedSecond.setColor(highLightColor);
-                mChart.highlightValues(new Highlight[] { mLastHighlighted, mLastHighlightedSecond });
-                fillSection();
-            } else if (h.isTappedOnTheLineWithInaccuracy(mLastHighlightedSecond) && h.getDownTime() != mLastHighlighted.getDownTime()) {
+            } else if (isSingleTap) {
+                mLastLineTapped = h;
+                mLastHighlighted.setColor(activeHighLightColor);
+                mLastHighlightedSecond.setColor(highLightColor);
+            }
+        } else if (h.isTappedOnTheLineWithInaccuracy(mLastHighlightedSecond) ) {
+            if (!isSingleTap && h.getDownTime() != mLastHighlighted.getDownTime()) {
                 mLastLineTapped = h;
                 mLastHighlightedSecond.setColor(activeHighLightColor);
                 mLastHighlighted.setColor(highLightColor);
-                mChart.highlightValues(new Highlight[] { mLastHighlighted, mLastHighlightedSecond });
-                fillSection();
-            } else if (mLastLineTapped.isTappedOnTheLineWithInaccuracy(mLastHighlighted) && h.getX() < mLastHighlightedSecond.getX()) {
-                mLastHighlighted = h;
-                mLastLineTapped = h;
-                mLastHighlighted.setColor(activeHighLightColor);
-                mChart.highlightValues(new Highlight[] { mLastHighlighted, mLastHighlightedSecond });
-                fillSection();
-            } else if (mLastLineTapped.isTappedOnTheLineWithInaccuracy(mLastHighlightedSecond) && h.getX() > mLastHighlighted.getX()) {
-                mLastHighlightedSecond = h;
+            } else if (isSingleTap) {
                 mLastLineTapped = h;
                 mLastHighlightedSecond.setColor(activeHighLightColor);
-                mChart.highlightValues(new Highlight[]{mLastHighlighted, mLastHighlightedSecond});
-                fillSection();
+                mLastHighlighted.setColor(highLightColor);
             }
+        } else if (mLastLineTapped.isTappedOnTheLineWithInaccuracy(mLastHighlighted) && h.getX() < mLastHighlightedSecond.getX() ) {
+            mLastHighlighted = h;
+            mLastLineTapped = h;
+            mLastHighlighted.setColor(activeHighLightColor);
+        } else if (mLastLineTapped.isTappedOnTheLineWithInaccuracy(mLastHighlightedSecond) && h.getX() > mLastHighlighted.getX() ) {
+            mLastHighlightedSecond = h;
+            mLastLineTapped = h;
+            mLastHighlightedSecond.setColor(activeHighLightColor);
         }
+        mChart.highlightValues(new Highlight[]{mLastHighlighted, mLastHighlightedSecond});
+        fillSection();
     }
 
     protected void fillSection() {

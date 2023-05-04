@@ -500,7 +500,7 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
                     h.setDownTime(e.getDownTime());
                     downTime = e.getDownTime();
                 }
-                performHighlightSection(h, highLightColor, activeHighLightColor);
+                performHighlightSection(h, highLightColor, activeHighLightColor, false);
             } else {
                 mLastHighlighted = h;
                 mChart.highlightValue(h, true);
@@ -692,7 +692,7 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
         } else {
             int highLightColor = mChart.getData().getDataSets().get(0).getHighLightColor();
             int activeHighLightColor = mChart.getData().getDataSets().get(0).getActiveHighLightColorForSection();
-            performHighlightSection(h, highLightColor, activeHighLightColor);
+            performHighlightSection(h, highLightColor, activeHighLightColor, true);
         }
 
         return super.onSingleTapUp(e);
