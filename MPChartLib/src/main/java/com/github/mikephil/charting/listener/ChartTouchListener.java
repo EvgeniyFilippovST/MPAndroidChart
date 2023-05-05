@@ -151,9 +151,7 @@ public abstract class ChartTouchListener<T extends Chart<?>> extends GestureDete
         }
         if (mLastHighlightedSecond == null) {
             if (h.getX() > mLastHighlighted.getX()) {
-                mLastHighlightedSecond = h;
-                mLastLineTapped = mLastHighlightedSecond;
-                mLastHighlightedSecond.setColor(activeHighLightColor);
+                setSecondHighlight(h, activeHighLightColor);
             } else if (h.getX() == mLastHighlighted.getX()) {
                 mLastHighlightedSecond = h;
                 mLastHighlightedSecond.setX(mLastHighlightedSecond.getX() + 1);
@@ -161,9 +159,7 @@ public abstract class ChartTouchListener<T extends Chart<?>> extends GestureDete
                 mLastHighlightedSecond.setColor(activeHighLightColor);
             } else {
                 mLastHighlightedSecond = mLastHighlighted;
-                mLastLineTapped = h;
-                mLastHighlighted = h;
-                mLastHighlighted.setColor(activeHighLightColor);
+                setFirstHighlight(h, activeHighLightColor);
             }
             mChart.highlightValues(new Highlight[]{mLastHighlighted, mLastHighlightedSecond});
             fillSection();
@@ -190,16 +186,24 @@ public abstract class ChartTouchListener<T extends Chart<?>> extends GestureDete
                 mLastHighlighted.setColor(highLightColor);
             }
         } else if (mLastLineTapped.isTappedOnTheLineWithInaccuracy(mLastHighlighted) && h.getX() < mLastHighlightedSecond.getX() ) {
-            mLastHighlighted = h;
-            mLastLineTapped = h;
-            mLastHighlighted.setColor(activeHighLightColor);
+            setFirstHighlight(h, activeHighLightColor);
         } else if (mLastLineTapped.isTappedOnTheLineWithInaccuracy(mLastHighlightedSecond) && h.getX() > mLastHighlighted.getX() ) {
-            mLastHighlightedSecond = h;
-            mLastLineTapped = h;
-            mLastHighlightedSecond.setColor(activeHighLightColor);
+            setSecondHighlight(h, activeHighLightColor);
         }
         mChart.highlightValues(new Highlight[]{mLastHighlighted, mLastHighlightedSecond});
         fillSection();
+    }
+
+    private void setFirstHighlight(Highlight h, int color) {
+        mLastHighlighted = h;
+        mLastLineTapped = h;
+        mLastHighlighted.setColor(color);
+    }
+
+    private void setSecondHighlight(Highlight h, int color) {
+        mLastHighlightedSecond = h;
+        mLastLineTapped = h;
+        mLastHighlightedSecond.setColor(color);
     }
 
     protected void fillSection() {
