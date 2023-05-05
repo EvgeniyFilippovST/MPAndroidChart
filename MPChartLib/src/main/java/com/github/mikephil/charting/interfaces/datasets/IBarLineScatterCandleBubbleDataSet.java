@@ -13,4 +13,6 @@ public interface IBarLineScatterCandleBubbleDataSet<T extends Entry> extends IDa
      * @return
      */
     int getHighLightColor();
+
+    int getActiveHighLightColorForSection();
 }

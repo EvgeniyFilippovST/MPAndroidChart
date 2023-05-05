@@ -21,6 +21,8 @@ public abstract class BarLineScatterCandleBubbleDataSet<T extends Entry>
      */
     protected int mHighLightColor = Color.rgb(255, 187, 115);
 
+    protected int mActiveHighLightColor = Color.RED;
+
     public BarLineScatterCandleBubbleDataSet(List<T> yVals, String label) {
         super(yVals, label);
     }
@@ -36,9 +38,18 @@ public abstract class BarLineScatterCandleBubbleDataSet<T extends Entry>
         mHighLightColor = color;
     }
 
+    public void setActiveHighLightColorForSection(int color) {
+        mActiveHighLightColor = color;
+    }
+
     @Override
     public int getHighLightColor() {
         return mHighLightColor;
+    }
+
+    @Override
+    public int getActiveHighLightColorForSection() {
+        return mActiveHighLightColor;
     }
 
     protected void copy(BarLineScatterCandleBubbleDataSet barLineScatterCandleBubbleDataSet) {

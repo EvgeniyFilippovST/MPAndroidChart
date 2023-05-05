@@ -25,6 +25,8 @@ import com.xxmassdeveloper.mpchartexample.CubicLineChartActivity;
 import com.xxmassdeveloper.mpchartexample.DynamicalAddingActivity;
 import com.xxmassdeveloper.mpchartexample.FilledLineActivity;
 import com.xxmassdeveloper.mpchartexample.HalfPieChartActivity;
+import com.xxmassdeveloper.mpchartexample.HighlightedLineChartActivity;
+import com.xxmassdeveloper.mpchartexample.HighlightedLineChartTime;
 import com.xxmassdeveloper.mpchartexample.HorizontalBarChartActivity;
 import com.xxmassdeveloper.mpchartexample.HorizontalBarNegativeChartActivity;
 import com.xxmassdeveloper.mpchartexample.InvertedLineChartActivity;
@@ -122,6 +124,8 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
         objects.add(35, new ContentItem("Dynamic", "Build a line chart by adding points and sets."));
         objects.add(36, new ContentItem("Realtime", "Add data points in realtime."));
         objects.add(37, new ContentItem("Hourly", "Uses the current time to add a data point for each hour."));
+        objects.add(38, new ContentItem("Highlighted section", "Highlighting sections between two vertical lines by pressing"));
+        objects.add(39, new ContentItem("Highlighted time section", "Highlighting sections between two vertical lines by pressing on the time срфке"));
         //objects.add(38, new ContentItem("Realm.io Examples", "See more examples that use Realm.io mobile database."));
 
         MyAdapter adapter = new MyAdapter(this, objects);
@@ -234,9 +238,13 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
             case 37:
                 i = new Intent(this, LineChartTime.class);
                 break;
-            /*case 38:
-                i = new Intent(this, RealmMainActivity.class);
-                break;*/
+            case 38:
+                i = new Intent(this, HighlightedLineChartActivity.class);
+                break;
+            case 39:
+                i = new Intent(this, HighlightedLineChartTime.class);
+                break;
+
         }
 
         if (i != null) startActivity(i);

@@ -498,6 +498,12 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
         return mIndicesToHighlight;
     }
 
+    public void clearHighlighted() {
+        mIndicesToHighlight = new Highlight[0];
+        mChartTouchListener.setLastHighlighted(null);
+        mChartTouchListener.setLastHighlightedSecond(null);
+    }
+
     /**
      * Returns true if values can be highlighted via tap gesture, false if not.
      *
@@ -773,6 +779,8 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      * the view that represents the marker
      */
     protected IMarker mMarker;
+
+    protected boolean highlightSectionPerTapEnabled = false;
 
     /**
      * draws all MarkerViews on the highlighted positions
@@ -1247,6 +1255,14 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      */
     public void setMarker(IMarker marker) {
         mMarker = marker;
+    }
+
+    public void setHighlightSectionPerTapEnabled(boolean enabled){
+        highlightSectionPerTapEnabled = enabled;
+    }
+
+    public boolean isHighlightSectionPerTapEnabled(){
+        return highlightSectionPerTapEnabled;
     }
 
     /**
