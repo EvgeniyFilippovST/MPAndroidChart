@@ -51,6 +51,7 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
     private float mSavedXDist = 1f;
     private float mSavedYDist = 1f;
     private float mSavedDist = 1f;
+    private float lineWidthForHighlightDragging = 4;
 
     private IDataSet mClosestDataSetToTouch;
 
@@ -63,10 +64,14 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
     private MPPointF mDecelerationCurrentPoint = MPPointF.getInstance(0,0);
     private MPPointF mDecelerationVelocity = MPPointF.getInstance(0,0);
 
+    private float downTime = 0f;
+
     /**
      * the distance of movement that will be counted as a drag
      */
     private float mDragTriggerDist;
+
+    private boolean isTappedOnHighlightLine = false;
 
     /**
      * the minimum distance between the pointers that will trigger a zoom gesture
@@ -163,8 +168,7 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
                 break;
 
             case MotionEvent.ACTION_MOVE:
-
-                if (mTouchMode == DRAG) {
+                if (mTouchMode == DRAG && !isTappedOnHighlightLine) {
 
                     mChart.disableScroll();
 
@@ -172,6 +176,13 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
                     float y = mChart.isDragYEnabled() ? event.getY() - mTouchStartPoint.y : 0.f;
 
                     performDrag(event, x, y);
+                } else if (mTouchMode == DRAG) {
+                    if (mChart.isHighlightPerDragEnabled()) {
+                        mLastGesture = ChartGesture.DRAG;
+
+                        if (mChart.isHighlightPerDragEnabled())
+                            performHighlightDrag(event);
+                    }
 
                 } else if (mTouchMode == X_ZOOM || mTouchMode == Y_ZOOM || mTouchMode == PINCH_ZOOM) {
 
@@ -183,13 +194,12 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
                 } else if (mTouchMode == NONE
                         && Math.abs(distance(event.getX(), mTouchStartPoint.x, event.getY(),
                         mTouchStartPoint.y)) > mDragTriggerDist) {
-
                     if (mChart.isDragEnabled()) {
 
                         boolean shouldPan = !mChart.isFullyZoomedOut() ||
                                 !mChart.hasNoDragOffset();
 
-                        if (shouldPan) {
+                        if (shouldPan && !isTappedOnTheLine(event)) {
 
                             float distanceX = Math.abs(event.getX() - mTouchStartPoint.x);
                             float distanceY = Math.abs(event.getY() - mTouchStartPoint.y);
@@ -287,6 +297,36 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
         return true; // indicate event was handled
     }
 
+    public boolean isTappedOnTheLine(MotionEvent event ) {
+        Highlight h = mChart.getHighlightByTouchPoint(event.getX(), event.getY());
+        if (h != null && mLastHighlightedSecond != null) {
+            float leftXOfFirstHighlighted = mLastHighlighted.getX() - lineWidthForHighlightDragging / 2;
+            float rightXOfFirstHighlighted = mLastHighlighted.getX() + lineWidthForHighlightDragging / 2;
+            float leftXOfSecondHighlighted = mLastHighlightedSecond.getX() - lineWidthForHighlightDragging / 2;
+            float rightXOfSecondHighlighted = mLastHighlightedSecond.getX() + lineWidthForHighlightDragging / 2;
+            return  (h.getX() > leftXOfFirstHighlighted && h.getX() < rightXOfFirstHighlighted)
+                    || (h.getX() > leftXOfSecondHighlighted && h.getX() < rightXOfSecondHighlighted);
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isTappedOnTheLineWithInaccuracy(Highlight h) {
+        if (mLastHighlightedSecond != null) {
+            return h.isTappedOnTheLineWithInaccuracy(mLastHighlighted) || h.isTappedOnTheLineWithInaccuracy(mLastHighlightedSecond);
+        } else {
+            return false;
+        }
+    }
+
+    public float getLineWidthForHighlightDragging() {
+        return lineWidthForHighlightDragging;
+    }
+
+    public void setLineWidthForHighlightDragging(float width) {
+        lineWidthForHighlightDragging = width;
+    }
+
     /**
      * ################ ################ ################ ################
      */
@@ -304,6 +344,11 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
         mTouchStartPoint.y = event.getY();
 
         mClosestDataSetToTouch = mChart.getDataSetByTouchPoint(event.getX(), event.getY());
+
+        if (mChart.isHighlightSectionPerTapAndDragEnabled()) {
+            Highlight h = mChart.getHighlightByTouchPoint(event.getX(), event.getY());
+            isTappedOnHighlightLine = isTappedOnTheLineWithInaccuracy(h);
+        }
     }
 
     /**
@@ -441,10 +486,25 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
     private void performHighlightDrag(MotionEvent e) {
 
         Highlight h = mChart.getHighlightByTouchPoint(e.getX(), e.getY());
+        if (!isDownTimeSet) {
+            mLastHighlighted.setDownTime(1f);
+            mLastHighlightedSecond.setDownTime(2f);
+            isDownTimeSet = true;
+        }
 
-        if (h != null && !h.equalTo(mLastHighlighted)) {
-            mLastHighlighted = h;
-            mChart.highlightValue(h, true);
+        if (h != null) {
+            if (mChart.isHighlightSectionPerTapAndDragEnabled()) {
+                int highLightColor = mChart.getData().getDataSets().get(0).getHighLightColor();
+                int activeHighLightColor = mChart.getData().getDataSets().get(0).getActiveHighLightColorForSection();
+                if (downTime != e.getDownTime()) {
+                    h.setDownTime(e.getDownTime());
+                    downTime = e.getDownTime();
+                }
+                performHighlightSection(h, highLightColor, activeHighLightColor, false);
+            } else {
+                mLastHighlighted = h;
+                mChart.highlightValue(h, true);
+            }
         }
     }
 
@@ -627,12 +687,12 @@ public class BarLineChartTouchListener extends ChartTouchListener<BarLineChartBa
         }
 
         Highlight h = mChart.getHighlightByTouchPoint(e.getX(), e.getY());
-        if (!mChart.isHighlightSectionPerTapEnabled()) {
+        if (!mChart.isHighlightSectionPerTapAndDragEnabled()) {
             performHighlight(h, e);
         } else {
             int highLightColor = mChart.getData().getDataSets().get(0).getHighLightColor();
             int activeHighLightColor = mChart.getData().getDataSets().get(0).getActiveHighLightColorForSection();
-            performHighlightSection(h, highLightColor, activeHighLightColor);
+            performHighlightSection(h, highLightColor, activeHighLightColor, true);
         }
 
         return super.onSingleTapUp(e);

@@ -62,6 +62,10 @@ public class Highlight {
 
     private int color;
 
+    private float highlightInaccuracy = 1;
+
+    private float downTime = 0f;
+
     public Highlight(float x, float y, int dataSetIndex, int dataIndex) {
         this.mX = x;
         this.mY = y;
@@ -122,6 +126,21 @@ public class Highlight {
 
     public void setX(float x) {
         mX = x;
+    }
+
+    public float getDownTime() {
+        return downTime;
+    }
+    public void setDownTime(float time) {
+        downTime = time;
+    }
+
+    public float getHighlightInaccuracy() {
+        return highlightInaccuracy;
+    }
+
+    public void setHighlightInaccuracy(float width) {
+        highlightInaccuracy = width;
     }
 
     /**
@@ -246,6 +265,17 @@ public class Highlight {
                 return true;
             else
                 return false;
+        }
+    }
+
+    public boolean isTappedOnTheLineWithInaccuracy(Highlight h ) {
+        if (h != null) {
+            float leftXOfFirstHighlighted = h.getX() - highlightInaccuracy;
+            float rightXOfFirstHighlighted = h.getX() + highlightInaccuracy;
+            return  (this.getX() > leftXOfFirstHighlighted && this.getX() < rightXOfFirstHighlighted
+                    && this.mDataSetIndex == h.mDataSetIndex && this.mStackIndex == h.mStackIndex && this.mDataIndex == h.mDataIndex);
+        } else {
+            return false;
         }
     }
 

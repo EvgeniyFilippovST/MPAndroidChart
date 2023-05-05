@@ -14,7 +14,6 @@ import android.graphics.Paint.Align;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore.Images;
 import android.text.TextUtils;
@@ -25,7 +24,6 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 
 import com.github.mikephil.charting.animation.ChartAnimator;
-import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.animation.Easing.EasingFunction;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.IMarker;
@@ -1257,11 +1255,11 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
         mMarker = marker;
     }
 
-    public void setHighlightSectionPerTapEnabled(boolean enabled){
+    public void setHighlightSectionPerTapAndDragEnabled(boolean enabled){
         highlightSectionPerTapEnabled = enabled;
     }
 
-    public boolean isHighlightSectionPerTapEnabled(){
+    public boolean isHighlightSectionPerTapAndDragEnabled(){
         return highlightSectionPerTapEnabled;
     }
 
